@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speed Tap Challenge</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ff6b6b, #5f27cd, #00d2d3);
+      color: white;
+    }
+
+    h1 {
+      margin-top: 35px;
+    }
+
+    #info {
+      font-size: 22px;
+      margin: 15px;
+    }
+
+    #gameArea {
+      width: 90%;
+      height: 400px;
+      margin: auto;
+      background: white;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+}
+
+#countdown {
+  #gameOver {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 25px;
+  border-radius: 20px;
+  width: 75%;
+  z-index: 20;
+}
+
+#gameOver button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 20px;
+  font-size: 17px;
+}
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: bold;
+  color: black;
+  z-index: 10;
+}
+    #tapButton {
+      position: absolute;
+      padding: 18px 25px;
+      border: none;
+      border-radius: 50px;
+      background: #ff4757;
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.8);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      transition: transform 0.1s;
+    }
+
+    #startButton {
+      margin: 20px;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+    }
+    #startButton,
+#gameOver button,
+button[onclick] {
+  cursor: pointer;
+  font-weight: bold;
+}
+  </style>
+</head>
+
+<body>
+
+<h1>⚡ SPEED TAP</h1>
+<p>How fast can you tap?</p>
+
+  <div id="info">
+    Score: <span id="score">0</span>
+    <br>
+    <br>
+Best: <span id="best">0</span>
+    Time: <span id="time">30</span>s
+  </div>
+<select id="difficulty">
+  <option value="30">🟢 Easy - 30 seconds</option>
+  <option value="20">🟡 Medium - 20 seconds</option>
+  <option value="10">🔴 Hard - 10 seconds</option>
+</select>
+  <input id="playerName" type="text" placeholder="Enter your name">
+  <button id="startButton">START GAME</button>
+<button onclick="localStorage.removeItem('best'); location.reload();">
+  RESET BEST SCORE
+</button>
+  <div id="gameArea">
+    <div id="countdown"></div>
+    <div id="gameOver">
+<h2>🎮 GAME OVER, <span id="playerNameResult">PLAYER</span>!</h2>
+  <p>Your Score: <span id="finalScore">0</span></p>
+  <p>🏆 Best Score: <span id="finalBest">0</span></p>
+  <button onclick="location.reload()">PLAY AGAIN</button>
+</div>
+    <button id="tapButton" style="display:none;">TAP ME!</button>
+  </div>
+
+  <script>
+    let score = 0;
+    let best = localStorage.getItem("best") || 0;
+    let time = 30;
+    const difficulty = document.getElementById("difficulty");
+    let timer;
+    const playerName = document.getElementById("playerName");
+const countdown = document.getElementById("countdown");
+    const gameOver = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+const finalBest = document.getElementById("finalBest");
+    const playerNameResult = document.getElementById("playerNameResult");
+    const scoreText = document.getElementById("score");
+    const bestText = document.getElementById("best");
+bestText.textContent = best;
+    const timeText = document.getElementById("time");
+    const tapButton = document.getElementById("tapButton");
+    const startButton = document.getElementById("startButton");
+    const gameArea = document.getElementById("gameArea");
+
+    function moveButton() {
+      const maxX = gameArea.clientWidth - tapButton.offsetWidth;
+      const maxY = gameArea.clientHeight - tapButton.offsetHeight;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      tapButton.style.left = x + "px";
+      tapButton.style.top = y + "px";
+    }
+
+    startButton.addEventListener("click", function() {
+      score = 0;
+      countdown.textContent = "3";
+      setTimeout(() => countdown.textContent = "2", 700);
+setTimeout(() => countdown.textContent = "1", 1400);
+setTimeout(() => countdown.textContent = "GO!", 2100);
+setTimeout(() => countdown.textContent = "", 2800);
+    time = Number(difficulty.value);
+
+      scoreText.textContent = score;
+      timeText.textContent = time;
+
+      tapButton.style.display = "block";
+      startButton.disabled = true;
+
+      moveButton();
+
+      timer = setInterval(function() {
+        time--;
+        timeText.textContent = time;
+
+        if (time <= 0) {
+          clearInterval(timer);
+          tapButton.style.display = "none";
+          startButton.disabled = false;
+          gameOver.style.display = "block";
+          playerNameResult.textContent = playerName.value || "PLAYER";
+          playerNameResult.textContent = playerName.value || "PLAYER";
+finalScore.textContent = score;
+finalBest.textContent = best;
+          alert("Time's up! Your score is " + score);
+        }
+      }, 1000);
+    });
+
+    tapButton.addEventListener("click", function() {
+  score++;
+      tapButton.style.transform = "scale(0.8)";
+setTimeout(() => tapButton.style.transform = "scale(1)", 100);
+  scoreText.textContent = score;
+
+  if (score > best) {
+    best = score;
+    localStorage.setItem("best", best);
+    bestText.textContent = best;
+  }
+
+  moveButton();
+});
+    
+    
+    
+
+  </script>
+
+</body>
+</html>
