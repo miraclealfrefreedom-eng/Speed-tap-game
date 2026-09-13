@@ -209,6 +209,27 @@ setTimeout(() => tapButton.style.transform = "scale(1)", 100);
     
 
   </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL = "https://pybiqkyyrwqnvtvghenx.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5Ymlxa3l5cndxbnZ0dmdoZW54Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyOTAxNjAsImV4cCI6MjEwNDg2NjE2MH0.4AhJ3_xxEHABxulC29UdCvycKxLI6Pr1k6rDx09Efpo";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+// Example: save a score
+async function saveScore(score) {
+  const { error } = await supabaseClient
+    .from("scores")
+    .insert([{ score: score }]);
+
+  if (error) {
+    console.error("Could not save score:", error);
+  }
+}
+</script>
 </body>
 </html>
